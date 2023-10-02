@@ -1,0 +1,7 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+aggregated|stem|0fe441bc1b468d3c|6878835b55d17fd2|d228d040315aeef2|1807818442||t19632.5341212587s|743216add9e1e088|3415|rds|local|vector|||1.126||
+disease_data|stem|5decdf2fcedb0b2e|5fbbb30bf3c81f7c|7a25a58a2039a0b1|1467961508||t19632.5368704273s|3d78b27a3710d3b2|134288|rds|local|vector|||0.013||
+disease_data_imputate|stem|f515d91939bc1bdb|03d89bd6979572a2|b19509add8eebc41|-1263145282||t19632.5297656786s|7693405748f0ce0c|134056|rds|local|vector|||0.093||
+imputate_disease_data|function|2502811671d4a0c8|||||||||||||||
+imputated|stem|f515d91939bc1bdb|648e4a4e23c92e3f|35dbc56fb53a51eb|624057077||t19632.5368720014s|7693405748f0ce0c|134056|rds|local|vector|||0.093||
+load_disease_data|function|59d0cb1183ef0859|||||||||||||||

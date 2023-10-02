@@ -5,13 +5,12 @@
 
 # Load packages required to define the pipeline:
 library(targets)
-library(disdata)
 
 # library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
 tar_option_set(
-  packages = c("tibble"), # packages that your targets need to run
+  packages = c("tibble", "disdata", "dplyr"), # packages that your targets need to run
   # format = "qs", # Optionally set the default storage format. qs is fast.
   #
   # For distributed computing in tar_make(), supply a {crew} controller
@@ -51,13 +50,14 @@ tar_source()
 
 # Replace the target list below with your own:
 list(
+  ### Disease data
   tar_target(
     name = disease_data,
     command = load_disease_data()
     # format = "feather" # efficient storage for large data frames
   ),
   tar_target(
-    name = imputated,
+    name = imputated_disease_data,
     command = imp_data(
       x = disease_data,
       g_var = "ID_MN_RESI",
@@ -70,12 +70,41 @@ list(
     )
   ),
   tar_target(
-    name = aggregated,
+    name = aggregated_disease_data,
     command = agg_data(
-      x = imputated,
+      x = imputated_disease_data,
       g_var = "ID_MN_RESI",
       d_var = "DT_SIN_PRI",
       a_unit = "week"
+    ) %>%
+      rename(mun = ID_MN_RESI, date = DT_SIN_PRI, cases = freq)
+  ),
+  ### Socio economic data
+  tar_target(
+    name = socio_economic_data_file,
+    command = "external_data/idhm.csv",
+    format = "file"
+  ),
+  tar_target(
+    name = socioeconomic_data,
+    command = load_socio_economic_data(x = socio_economic_data_file)
+  ),
+  ### Population data
+  tar_target(
+    name = population_data,
+    command = load_population_data(d_var = aggregated_disease_data$date)
+  ),
+  ### Bundle data
+  tar_target(
+    name = bundled_data,
+    command = create_bundled_data(
+      disease_data = aggregated_disease_data,
+      pop_data = population_data,
+      socio_data = socioeconomic_data
     )
+  ),
+  tar_target(
+    name = write_bundled_data,
+    command = bundled_data %>% readr::write_csv2(file = "external_data/bundled_data.csv")
   )
 )

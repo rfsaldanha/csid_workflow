@@ -10,7 +10,7 @@ library(targets)
 
 # Set target options:
 tar_option_set(
-  packages = c("tibble", "disdata", "dplyr"), # packages that your targets need to run
+  packages = c("tibble", "dplyr", "disdata", "zonalclim"), # packages that your targets need to run
   # format = "qs", # Optionally set the default storage format. qs is fast.
   #
   # For distributed computing in tar_make(), supply a {crew} controller
@@ -52,14 +52,14 @@ tar_source()
 list(
   ### Disease data
   tar_target(
-    name = disease_data,
+    name = raw_disease_data,
     command = load_disease_data()
     # format = "feather" # efficient storage for large data frames
   ),
   tar_target(
     name = imputated_disease_data,
     command = imp_data(
-      x = disease_data,
+      x = raw_disease_data,
       g_var = "ID_MN_RESI",
       g_var_candidate = "COMUNINF",
       g_var_nchar = 6,
@@ -70,7 +70,7 @@ list(
     )
   ),
   tar_target(
-    name = aggregated_disease_data,
+    name = disease_data,
     command = agg_data(
       x = imputated_disease_data,
       g_var = "ID_MN_RESI",
@@ -82,7 +82,7 @@ list(
   ### Socio economic data
   tar_target(
     name = socio_economic_data_file,
-    command = "external_data/idhm.csv",
+    command = "input_data/socioeconomic/idhm.csv",
     format = "file"
   ),
   tar_target(
@@ -92,19 +92,50 @@ list(
   ### Population data
   tar_target(
     name = population_data,
-    command = load_population_data(d_var = aggregated_disease_data$date)
+    command = load_population_data(d_var = disease_data$date)
+  ),
+  ### Climate data
+  tar_target(
+    name = max_temperature_data,
+    command = prepare_climate_data(
+      path = "input_data/climate/max_temperature/",
+      zonal_list <- c("mean"),
+      db_file = "output_data/max_temperature.sqlite"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    name = mean_temperature_data,
+    command = prepare_climate_data(
+      path = "input_data/climate/mean_temperature/",
+      zonal_list <- c("mean"),
+      db_file = "output_data/mean_temperature.sqlite"
+    ),
+    format = "file"
+  ),
+  tar_target(
+    name = min_temperature_data,
+    command = prepare_climate_data(
+      path = "input_data/climate/min_temperature/",
+      zonal_list <- c("mean"),
+      db_file = "output_data/min_temperature.sqlite"
+    ),
+    format = "file"
   ),
   ### Bundle data
   tar_target(
     name = bundled_data,
     command = create_bundled_data(
-      disease_data = aggregated_disease_data,
-      pop_data = population_data,
-      socio_data = socioeconomic_data
+      disease_data = disease_data,
+      population_data = population_data,
+      socioeconomic_data = socioeconomic_data,
+      max_temperature_data,
+      min_temperature_data,
+      mean_temperature_data
     )
   ),
   tar_target(
     name = write_bundled_data,
-    command = bundled_data %>% readr::write_csv2(file = "external_data/bundled_data.csv")
+    command = bundled_data %>% readr::write_csv2(file = "output_data/bundled_data.csv")
   )
 )

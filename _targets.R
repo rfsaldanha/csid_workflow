@@ -18,6 +18,14 @@ tar_source()
 
 ### Definitions
 
+# Disease variables to load
+important_vars <- c("DT_NOTIFIC","DT_SIN_PRI","ID_MN_RESI","COMUNINF")
+
+# Disease diagnose labels classified as positive
+labels_classifications <- c("Febre hemorrágica do dengue", "Síndrome do choque do dengue", "Dengue com sinais de alarme",
+                            "Dengue clássico", "Dengue com complicações", "Dengue",
+                            "Dengue grave")
+
 # Boundaries code unique identifier
 g_var <- "ID_MN_RESI"
 
@@ -66,7 +74,7 @@ list(
   # Load disease data
   tar_target(
     name = raw_disease_data,
-    command = load_disease_data(disease_data_files),
+    command = load_disease_data(disease_data_files, important_vars, labels_classifications),
     cue = tar_cue(mode = "never")
   ),
   # Imputate disease data variables
@@ -101,7 +109,8 @@ list(
   # Disease data report
   tar_quarto(
     name = disease_data_report,
-    path = "reports/disease_data_report.qmd"
+    path = "reports/disease_data_report.qmd",
+    execute_params = list(labels_classifications = labels_classifications)
   ),
   ### Socio economic data
   # Load socioeconomic data

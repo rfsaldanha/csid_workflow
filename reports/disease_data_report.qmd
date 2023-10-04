@@ -4,10 +4,13 @@ date: now
 execute:
   echo: false
   warning: false
+params:
+  labels_classifications: NULL
 ---
 
 ```{r}
 library(dplyr)
+library(arrow)
 library(DT)
 
 fint <- function(x){
@@ -34,7 +37,23 @@ list.files(disease_data_files)
 
 ## Raw data
 
-The raw dataset contains `r fint(nrow(raw_disease_data))` rows and `r fint(length(raw_disease_data))` variables.
+```{r}
+original_rows <- open_dataset(sources = disease_data_files) %>%
+  tally() %>%
+  collect() %>%
+  pull(n)
+```
+
+The original files contains `r fint(original_rows)` rows. 
+
+The diagnose filter considered the following labels:
+
+```{r}
+params$labels_classifications
+```
+
+
+After filtering, the raw dataset contains `r fint(nrow(raw_disease_data))` rows and `r fint(length(raw_disease_data))` variables.
 
 Below, the first 100 values of the dataset.
 

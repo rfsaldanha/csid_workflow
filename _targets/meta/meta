@@ -1,4 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|924e138c61ffd77e|||||||||||||||
 a_unit|object|1a0a633fb374bc9a|||||||||||||||
 bundled_data|stem|d3f06329f6a1c75e|fb3b753787baf9fa|32fd07143b156506|2052067080||t19634.5293596767s|6d5421444916056f|279415612|qs|local|vector|||172.976||
 create_bundled_data|function|eec105e26737a5ba|||||||||||||||
@@ -8,6 +9,7 @@ d_var_max|object|3b51b2641dee82de|||||||||||||||
 d_var_min|object|951615555dd44ab0|||||||||||||||
 disease_data|stem|a15442627c543c4a|71d501fb6a34dfda|be5909fd8590226e|1467961508||t19634.5617340079s|9da5f36209d267b0|549205|qs|local|vector|||46.741||
 disease_data_files|stem|4497cd6f1eac5cd0|e015ac0dd74b3d59|b90ffe3f491c824c|-287577810|input_data/disease/|t19634.5514947375s|a75e104011428481|4096|file|local|vector|||1.886||
+disease_data_report|stem|f47e8491bbe38382|923d4c0d93d07bd6|b3b80064084518a6|-816429821|reports/disease_data_report.html*reports/disease_data_report.qmd|t19634.6139678008s|e2bb134fe771ff8a|33061|file|local|vector|||4.726||
 export_bundled_data|stem|a94585f9fe798841|a60ceac771fdface|206a64eb6a0573b4|-1707331853|output_data/bundled_data.parquet|t19634.529413287s|dde7d2be8cece6c3|410330701|file|local|vector|||2.606||
 file_socioeconomic_data|object|ba3721d0c05bc11e|||||||||||||||
 files_disease_data|object|b2bed832e05515e8|||||||||||||||

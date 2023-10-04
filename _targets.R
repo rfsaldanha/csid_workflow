@@ -1,5 +1,7 @@
 ### Load packages required to define the pipeline
 library(targets)
+library(tarchetypes)
+library(quarto)
 
 ### Set target options
 tar_option_set(
@@ -64,7 +66,8 @@ list(
   # Load disease data
   tar_target(
     name = raw_disease_data,
-    command = load_disease_data(disease_data_files)
+    command = load_disease_data(disease_data_files),
+    cue = tar_cue(mode = "never")
   ),
   # Imputate disease data variables
   tar_target(
@@ -95,12 +98,18 @@ list(
       a_unit = a_unit
     )
   ),
+  # Disease data report
+  tar_quarto(
+    name = disease_data_report,
+    path = "reports/disease_data_report.qmd"
+  ),
   ### Socio economic data
   # Load socioeconomic data
   tar_target(
     name = socioeconomic_data_file,
     command = file_socioeconomic_data,
-    format = "file"
+    format = "file",
+    cue = tar_cue(mode = "never")
   ),
   tar_target(
     name = socioeconomic_data,
@@ -116,7 +125,8 @@ list(
   tar_target(
     name = max_temperature_data_files,
     command = files_max_temperature_data,
-    format = "file"
+    format = "file",
+    cue = tar_cue(mode = "never")
   ),
   # Prepare max temp data
   tar_target(
@@ -132,7 +142,8 @@ list(
   tar_target(
     name = min_temperature_data_files,
     command = files_min_temperature_data,
-    format = "file"
+    format = "file",
+    cue = tar_cue(mode = "never")
   ),
   # Prepare min temp data
   tar_target(
@@ -148,7 +159,8 @@ list(
   tar_target(
     name = precipitation_data_files,
     command = files_precipitation_data,
-    format = "file"
+    format = "file",
+    cue = tar_cue(mode = "never")
   ),
   tar_target(
     name = precipitation_data,

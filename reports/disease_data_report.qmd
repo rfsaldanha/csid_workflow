@@ -1,0 +1,75 @@
+---
+title: Disease data report
+date: now
+execute:
+  echo: false
+  warning: false
+---
+
+```{r}
+library(dplyr)
+library(DT)
+
+fint <- function(x){
+  format(x, big.mark=",")
+}
+```
+
+
+```{r}
+targets::tar_load(disease_data_files)
+targets::tar_load(raw_disease_data)
+targets::tar_load(disease_data)
+targets::tar_load(imputated_disease_data)
+targets::tar_load(valid_disease_data)
+```
+
+## Source files
+
+The following original file were considered:
+
+```{r}
+list.files(disease_data_files)
+```
+
+## Raw data
+
+The raw dataset contains `r fint(nrow(raw_disease_data))` rows and `r fint(length(raw_disease_data))` variables.
+
+Below, the first 100 values of the dataset.
+
+```{r}
+head(raw_disease_data, 100) %>% datatable()
+```
+
+## Imputated dataset
+
+The raw dataset contains `r fint(nrow(imputated_disease_data))` rows and `r fint(length(imputated_disease_data))` variables.
+
+Below, the first 100 values of the dataset.
+
+```{r}
+head(imputated_disease_data, 100) %>% datatable()
+```
+
+## Valid dataset
+
+The valid dataset contains `r fint(nrow(valid_disease_data))` rows and `r fint(length(valid_disease_data))` variables.
+
+Below, the first 100 values of the dataset.
+
+```{r}
+head(valid_disease_data, 100) %>% datatable()
+```
+
+## Aggregated dataset
+
+The aggregated dataset contains `r fint(nrow(disease_data))` rows and `r fint(length(disease_data))` variables.
+
+Below, the first 100 values of the dataset.
+
+```{r}
+head(disease_data, 100) %>% datatable()
+```
+
+

@@ -1,4 +1,4 @@
-load_disease_data <- function(){
+load_disease_data <- function(x){
 
   # Variables to load
   important_vars <- c("DT_NOTIFIC","DT_SIN_PRI","ID_MN_RESI","COMUNINF")
@@ -9,7 +9,7 @@ load_disease_data <- function(){
                               "Dengue grave")
 
   # Open dataset of parquet files
-  open_dataset(sources = "input_data/disease/") %>%
+  open_dataset(sources = x) %>%
     # Filter only positive cases
     filter(CLASSI_FIN %in% dengue_classifications) %>%
     # Select only important variables

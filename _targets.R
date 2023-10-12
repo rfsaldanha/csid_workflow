@@ -6,8 +6,8 @@ library(quarto)
 ### Set target options
 tar_option_set(
   packages = c(
-    "tibble", "dplyr", "arrow", "qs", "lubridate", "readr", "timetk", "janitor",
-    "sf", "filesstrings", "brpop", "disdata", "zonalclim"
+    "tibble", "dplyr", "tidyr", "arrow", "qs", "lubridate", "readr", "timetk",
+    "janitor", "sf", "filesstrings", "brpop", "disdata", "zonalclim", "dtwclust"
   ),
   format = "qs",
   controller = crew::crew_controller_local(workers = 4)
@@ -180,6 +180,16 @@ list(
     ),
     format = "file"
   ),
+  ### Filter reference
+  tar_target(
+    name = filter_reference,
+    command = create_filter_reference(population_data)
+  ),
+  ### Create subsets
+  tar_target(
+    name = subsets,
+    command = create_subsets(disease_data, filter_reference)
+  ),
   ### Bundle data
   tar_target(
     name = bundled_data,
@@ -187,6 +197,7 @@ list(
       disease_data = disease_data,
       g_var = g_var,
       d_var = d_var,
+      subsets = subsets,
       population_data = population_data,
       socioeconomic_data = socioeconomic_data,
       max_temperature_data = max_temperature_data,

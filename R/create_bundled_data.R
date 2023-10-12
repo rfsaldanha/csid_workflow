@@ -1,10 +1,12 @@
-create_bundled_data <- function(disease_data, g_var, d_var, population_data, socioeconomic_data,
-                                max_temperature_data, min_temperature_data,
-                                precipitation_data){
+create_bundled_data <- function(disease_data, g_var, d_var, subsets, population_data,
+                                socioeconomic_data, max_temperature_data,
+                                min_temperature_data, precipitation_data){
   # Disease data
   res1 <- disease_data %>%
     # Rename fields
     rename("code_muni" = !!sym(g_var), "date" = !!sym(d_var), "cases" = "freq") %>%
+    # Join subset id
+    inner_join(subsets, by = "code_muni") %>%
     # Create year variable to join with population data
     mutate(dengue_year = lubridate::year(date)) %>%
     # Join population data by mun and year
@@ -69,6 +71,7 @@ create_bundled_data <- function(disease_data, g_var, d_var, population_data, soc
   # Lag variables
   res6 <- res5 %>%
     group_by(code_muni) %>%
+    arrange(date) %>%
     tk_augment_lags(.value = c(cases, tmax, tmin, prec), .lags = 1:6) %>%
     ungroup()
 

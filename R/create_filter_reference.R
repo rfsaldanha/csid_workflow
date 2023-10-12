@@ -1,6 +1,6 @@
-create_filter_reference <- function(population_data){
+create_filter_reference <- function(population_data, p){
   population_data %>%
     filter(year == max(year)) %>%
-    filter(pop >= 100000) %>%
+    filter(pop >= p) %>%
     select(mun, pop)
 }

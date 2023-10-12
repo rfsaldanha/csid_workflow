@@ -30,5 +30,5 @@ load_socio_economic_data <- function(x){
     rename(code_muni = cd_geocmu, name_muni = municipio, code_uf = cod_estado, uf = estado) %>%
     select(-nm_munnicip) %>%
     mutate(code_muni = substr(code_muni, 0, 6)) %>%
-    select(code_muni, idhm1991, idhm2000, idhm2010)
+    select(code_muni, idhm2010)
 }

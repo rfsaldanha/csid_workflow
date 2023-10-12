@@ -61,6 +61,8 @@ files_max_temperature_data <- list.files("input_data/climate/max_temperature/", 
 files_min_temperature_data <- list.files("input_data/climate/min_temperature/", full.names = TRUE)
 files_precipitation_data <- list.files("input_data/climate/precipitation/", full.names = TRUE)
 
+# Population size filter
+p <- 100000
 
 ### Target definitions list
 list(
@@ -183,7 +185,7 @@ list(
   ### Filter reference
   tar_target(
     name = filter_reference,
-    command = create_filter_reference(population_data)
+    command = create_filter_reference(population_data, p)
   ),
   ### Create subsets
   tar_target(

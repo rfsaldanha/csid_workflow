@@ -12,9 +12,9 @@ create_bundled_data <- function(disease_data, g_var, d_var, subsets, population_
     # Join population data by mun and year
     inner_join(population_data, by = c("dengue_year" = "year", "code_muni" = "mun")) %>%
     # Compute population rate
-    mutate(rate = cases/pop*100000) %>%
-    # Remove year variable
-    select(-dengue_year) %>%
+    mutate(rate = round(cases/pop*100000)) %>%
+    # Remove year and pop variable
+    select(-dengue_year, -pop) %>%
     # Join socioeconomic data by year
     left_join(socioeconomic_data, by = c("code_muni")) %>%
     # Remove invalid municipalities
@@ -72,7 +72,7 @@ create_bundled_data <- function(disease_data, g_var, d_var, subsets, population_
   res6 <- res5 %>%
     group_by(code_muni) %>%
     arrange(date) %>%
-    tk_augment_lags(.value = c(cases, tmax, tmin, prec), .lags = 1:6) %>%
+    tk_augment_lags(.value = c(cases, rate, tmax, tmin, prec), .lags = 1:6) %>%
     ungroup()
 
   return(res6)
